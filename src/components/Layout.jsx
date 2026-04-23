@@ -11,6 +11,7 @@ export default function Layout({ children, title, backPath, headerColor = 'bg-gr
     if (confirm('Yakin ingin keluar?')) {
       await signOut()
       toast.success('Berhasil keluar!')
+      navigate('/login')
     }
   }
 
