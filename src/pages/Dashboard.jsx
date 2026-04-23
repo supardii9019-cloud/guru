@@ -24,7 +24,7 @@ const fiturLainnya = [
   { emoji: '✍️', label: 'Kerjakan\nUjian', path: '/kerjakan-ujian', bg: 'bg-yellow-50', border: 'border-yellow-200' },
   { emoji: '✅', label: 'Izin\nPegawai', path: '/izin-pegawai', bg: 'bg-teal-50', border: 'border-teal-200' },
   { emoji: '💬', label: 'Absensi\nWA', path: '#', bg: 'bg-green-50', border: 'border-green-200' },
-  { emoji: '📱', label: 'Absen\nBarcode', path: '#', bg: 'bg-purple-50', border: 'border-purple-200' },
+  { emoji: '📱', label: 'Absen\nBarcode', path: '/absen-barcode', bg: 'bg-purple-50', border: 'border-purple-200' },
   { emoji: '🗂️', label: 'Absensi\nPegawai', path: '/absensi-pegawai', bg: 'bg-blue-50', border: 'border-blue-200' },
 ]
 
