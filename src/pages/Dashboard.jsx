@@ -15,7 +15,7 @@ const menuUtama = [
 const fiturLainnya = [
   { emoji: '👨‍👩‍👧', label: 'Jurnal Guru\nWali', path: '/jurnal-wali', bg: 'bg-pink-50', border: 'border-pink-200' },
   { emoji: '📚', label: 'Modul\nPembelajaran', path: '/modul', bg: 'bg-red-50', border: 'border-red-200' },
-  { emoji: '📖', label: 'Jurnal\n7 KAIH', path: '/jurnal', bg: 'bg-blue-50', border: 'border-blue-200' },
+  { emoji: '📖', label: 'Jurnal\n7 KAIH', path: '/jurnal-kaih', bg: 'bg-blue-50', border: 'border-blue-200' },
   { emoji: '⚠️', label: 'Pelanggaran\nSiswa', path: '/pelanggaran', bg: 'bg-rose-50', border: 'border-rose-200' },
   { emoji: '🏗️', label: 'Struktur\nKelas', path: '/struktur-kelas', bg: 'bg-amber-50', border: 'border-amber-200' },
   { emoji: '🗓️', label: 'Jadwal\nPiket', path: '/jadwal-piket', bg: 'bg-yellow-50', border: 'border-yellow-200' },
