@@ -20,6 +20,7 @@ import JadwalPiket from './pages/JadwalPiket'
 import UjianOnline from './pages/UjianOnline'
 import IzinPegawai from './pages/IzinPegawai'
 import Profil from './pages/Profil'
+import Jurnal7KAIH from './pages/Jurnal7KAIH'
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth()
