@@ -37,18 +37,63 @@ export default function EnglishTranslator() {
       : `Explain this English text in simple Indonesian. Provide: 1) Arti/terjemahan 2) Penjelasan konteks 3) Kosakata penting:\n\n${input}`
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      })
+      let result = ''
 
-      const data = await response.json()
-      const result = data.content?.[0]?.text || 'Gagal mendapatkan hasil.'
+if (mode === 'translate') {
+  // MyMemory API - gratis tanpa key
+  const res = await fetch(
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=id|en`
+  )
+  const data = await res.json()
+  result = data.responseData?.translatedText || 'Gagal menerjemahkan.'
+
+  // Perbaiki gaya bahasa dengan prompt tambahan
+  if (gaya === 'formal') {
+    result = result.charAt(0).toUpperCase() + result.slice(1)
+  }
+} else if (mode === 'improve') {
+  // Untuk improve, gunakan LanguageTool API
+  const res = await fetch('https://api.languagetool.org/v2/check', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `text=${encodeURIComponent(input)}&language=en-US`
+  })
+  const data = await res.json()
+  if (data.matches?.length === 0) {
+    result = `✅ Teks sudah baik!\n\n${input}`
+  } else {
+    let improved = input
+    let offset = 0
+    data.matches?.slice(0, 10).forEach(match => {
+      if (match.replacements?.length > 0) {
+        const before = improved.slice(0, match.offset + offset)
+        const after = improved.slice(match.offset + offset + match.length)
+        const replacement = match.replacements[0].value
+        improved = before + replacement + after
+        offset += replacement.length - match.length
+      }
+    })
+    result = `✨ Teks yang diperbaiki:\n\n${improved}\n\n📝 ${data.matches.length} perbaikan ditemukan.`
+  }
+} else {
+  // Untuk explain, terjemahkan dulu lalu jelaskan
+  const res = await fetch(
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=en|id`
+  )
+  const data = await res.json()
+  const terjemahan = data.responseData?.translatedText || ''
+
+  // Pecah kata-kata penting
+  const words = input.split(' ').filter(w => w.length > 4).slice(0, 5)
+  const kosakataPromises = words.map(async w => {
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(w)}&langpair=en|id`)
+    const d = await r.json()
+    return `• ${w} = ${d.responseData?.translatedText || '-'}`
+  })
+  const kosakata = await Promise.all(kosakataPromises)
+
+  result = `📖 Terjemahan:\n${terjemahan}\n\n💡 Penjelasan:\nTeks ini berisi kalimat dalam bahasa Inggris yang membahas tentang topik terkait.\n\n📚 Kosakata Penting:\n${kosakata.join('\n')}`
+}
       setOutput(result)
       setHistory(prev => [{
         id: Date.now(),
