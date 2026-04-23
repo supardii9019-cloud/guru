@@ -42,7 +42,17 @@ export default function Siswa() {
   const handleSave = async () => {
     if (!form.nis || !form.nama) return toast.error('NIS dan nama wajib diisi!')
     setSaving(true)
-    const payload = { ...form }
+    // Konversi string kosong ke null agar tidak konflik dengan constraint UNIQUE (nisn, dll)
+    const payload = {
+      ...form,
+      nisn: form.nisn?.trim() || null,
+      kelas_id: form.kelas_id || null,
+      tanggal_lahir: form.tanggal_lahir || null,
+      tempat_lahir: form.tempat_lahir?.trim() || null,
+      alamat: form.alamat?.trim() || null,
+      nama_ortu: form.nama_ortu?.trim() || null,
+      no_hp_ortu: form.no_hp_ortu?.trim() || null,
+    }
 
     let error
     if (editMode && detail) {
