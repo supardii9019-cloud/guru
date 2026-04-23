@@ -21,6 +21,7 @@ import UjianOnline from './pages/UjianOnline'
 import IzinPegawai from './pages/IzinPegawai'
 import Profil from './pages/Profil'
 import Jurnal7KAIH from './pages/Jurnal7KAIH'
+import KerjakanUjian from './pages/KerjakanUjian'
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth()
