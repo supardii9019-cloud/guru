@@ -57,6 +57,7 @@ function AppRoutes() {
       <Route path="/izin-pegawai" element={<ProtectedRoute><IzinPegawai /></ProtectedRoute>} />
       <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
       <Route path="/jurnal-kaih" element={<ProtectedRoute><Jurnal7KAIH /></ProtectedRoute>} />
+      <Route path="/kerjakan-ujian" element={<ProtectedRoute><KerjakanUjian /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
