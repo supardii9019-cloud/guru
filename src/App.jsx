@@ -22,6 +22,7 @@ import IzinPegawai from './pages/IzinPegawai'
 import Profil from './pages/Profil'
 import Jurnal7KAIH from './pages/Jurnal7KAIH'
 import KerjakanUjian from './pages/KerjakanUjian'
+import EnglishTranslator from './pages/EnglishTranslator'
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth()
@@ -58,6 +59,7 @@ function AppRoutes() {
       <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
       <Route path="/jurnal-kaih" element={<ProtectedRoute><Jurnal7KAIH /></ProtectedRoute>} />
       <Route path="/kerjakan-ujian" element={<ProtectedRoute><KerjakanUjian /></ProtectedRoute>} />
+      <Route path="/translator" element={<ProtectedRoute><EnglishTranslator /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
