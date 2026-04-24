@@ -47,17 +47,15 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
 
-      {/* Route Siswa */}
-      <Route path="/siswa-dashboard" element={
-        <ProtectedRoute allowRoles={['siswa']}><DashboardSiswa /></ProtectedRoute>
-      } />
-      <Route path="/kerjakan-ujian" element={
-        <ProtectedRoute allowRoles={['siswa', 'guru', 'admin']}><KerjakanUjian /></ProtectedRoute>
-      } />
+      {/* Siswa */}
+      <Route path="/siswa-dashboard" element={<ProtectedRoute allowRoles={['siswa']}><DashboardSiswa /></ProtectedRoute>} />
+      <Route path="/kerjakan-ujian" element={<ProtectedRoute allowRoles={['siswa','guru','admin']}><KerjakanUjian /></ProtectedRoute>} />
 
-      {/* Route Guru/Admin */}
-      <Route path="/" element={<ProtectedRoute allowRoles={['guru','admin']}><Dashboard /></ProtectedRoute>} />
+      {/* Admin only */}
       <Route path="/akun-siswa" element={<ProtectedRoute allowRoles={['admin']}><AkunSiswa /></ProtectedRoute>} />
+
+      {/* Guru & Admin */}
+      <Route path="/" element={<ProtectedRoute allowRoles={['guru','admin']}><Dashboard /></ProtectedRoute>} />
       <Route path="/absensi" element={<ProtectedRoute allowRoles={['guru','admin']}><AbsensiKelas /></ProtectedRoute>} />
       <Route path="/jurnal" element={<ProtectedRoute allowRoles={['guru','admin']}><Jurnal /></ProtectedRoute>} />
       <Route path="/penilaian" element={<ProtectedRoute allowRoles={['guru','admin']}><Penilaian /></ProtectedRoute>} />
@@ -90,12 +88,7 @@ export default function App() {
           position="top-center"
           toastOptions={{
             duration: 3000,
-            style: {
-              background: '#1f2937',
-              color: '#fff',
-              borderRadius: '16px',
-              fontSize: '14px',
-            },
+            style: { background: '#1f2937', color: '#fff', borderRadius: '16px', fontSize: '14px' },
           }}
         />
         <AppRoutes />
