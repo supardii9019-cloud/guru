@@ -1,0 +1,26 @@
+{
+  "name": "Sekolah Digital",
+  "short_name": "Sekolah",
+  "description": "Sistem Informasi Manajemen Sekolah",
+  "start_url": "/guru/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/guru/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/guru/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "id"
+}
