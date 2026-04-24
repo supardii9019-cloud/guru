@@ -3,6 +3,7 @@
   "short_name": "Sekolah",
   "description": "Sistem Informasi Manajemen Sekolah",
   "start_url": "/guru/",
+  "scope": "/guru/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#16a34a",
