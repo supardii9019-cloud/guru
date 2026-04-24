@@ -25,6 +25,7 @@ import KerjakanUjian from './pages/KerjakanUjian'
 import EnglishTranslator from './pages/EnglishTranslator'
 import AbsenBarcode from './pages/AbsenBarcode'
 import DashboardSiswa from './pages/DashboardSiswa'
+import AkunSiswa from './pages/AkunSiswa'
 
 const ProtectedRoute = ({ children, allowRoles }) => {
   const { user, role, loading } = useAuth()
@@ -56,6 +57,7 @@ function AppRoutes() {
 
       {/* Route Guru/Admin */}
       <Route path="/" element={<ProtectedRoute allowRoles={['guru','admin']}><Dashboard /></ProtectedRoute>} />
+      <Route path="/akun-siswa" element={<ProtectedRoute allowRoles={['admin']}><AkunSiswa /></ProtectedRoute>} />
       <Route path="/absensi" element={<ProtectedRoute allowRoles={['guru','admin']}><AbsensiKelas /></ProtectedRoute>} />
       <Route path="/jurnal" element={<ProtectedRoute allowRoles={['guru','admin']}><Jurnal /></ProtectedRoute>} />
       <Route path="/penilaian" element={<ProtectedRoute allowRoles={['guru','admin']}><Penilaian /></ProtectedRoute>} />
