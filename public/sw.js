@@ -1,38 +1,32 @@
-const CACHE_NAME = 'sekolah-digital-v1'
-const urlsToCache = [
-  '/guru/',
-  '/guru/index.html',
-]
-
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-  )
-  self.skipWaiting()
-})
-
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
-  )
-  self.clients.claim()
-})
-
-self.addEventListener('fetch', event => {
-  // Hanya cache GET requests
-  if (event.request.method !== 'GET') return
-  // Jangan cache Supabase API
-  if (event.request.url.includes('supabase.co')) return
-
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const clone = response.clone()
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone))
-        return response
-      })
-      .catch(() => caches.match(event.request))
-  )
-})
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#16a34a" />
+    <meta name="description" content="Sistem Informasi Manajemen Sekolah" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Sekolah Digital" />
+    <link rel="manifest" href="/guru/manifest.json" />
+    <link rel="apple-touch-icon" href="/guru/icon-192.png" />
+    <title>Sekolah Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/guru/sw.js')
+            .then(reg => console.log('SW registered'))
+            .catch(err => console.log('SW failed:', err))
+        })
+      }
+    </script>
+  </body>
+</html>
