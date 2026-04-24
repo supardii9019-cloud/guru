@@ -24,44 +24,57 @@ import Jurnal7KAIH from './pages/Jurnal7KAIH'
 import KerjakanUjian from './pages/KerjakanUjian'
 import EnglishTranslator from './pages/EnglishTranslator'
 import AbsenBarcode from './pages/AbsenBarcode'
+import DashboardSiswa from './pages/DashboardSiswa'
 
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth()
+const ProtectedRoute = ({ children, allowRoles }) => {
+  const { user, role, loading } = useAuth()
   if (loading) return <LoadingSpinner fullScreen />
-  return user ? children : <Navigate to="/login" replace />
+  if (!user) return <Navigate to="/login" replace />
+  if (allowRoles && !allowRoles.includes(role)) return <Navigate to="/" replace />
+  return children
 }
 
 const PublicRoute = ({ children }) => {
-  const { user, loading } = useAuth()
+  const { user, role, loading } = useAuth()
   if (loading) return <LoadingSpinner fullScreen />
-  return !user ? children : <Navigate to="/" replace />
+  if (!user) return children
+  return <Navigate to={role === 'siswa' ? '/siswa-dashboard' : '/'} replace />
 }
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-      <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/absensi" element={<ProtectedRoute><AbsensiKelas /></ProtectedRoute>} />
-      <Route path="/jurnal" element={<ProtectedRoute><Jurnal /></ProtectedRoute>} />
-      <Route path="/penilaian" element={<ProtectedRoute><Penilaian /></ProtectedRoute>} />
-      <Route path="/siswa" element={<ProtectedRoute><Siswa /></ProtectedRoute>} />
-      <Route path="/kelas" element={<ProtectedRoute><Kelas /></ProtectedRoute>} />
-      <Route path="/materi" element={<ProtectedRoute><Materi /></ProtectedRoute>} />
-      <Route path="/raport" element={<ProtectedRoute><Raport /></ProtectedRoute>} />
-      <Route path="/pelanggaran" element={<ProtectedRoute><PelanggaranSiswa /></ProtectedRoute>} />
-      <Route path="/absensi-pegawai" element={<ProtectedRoute><AbsensiPegawai /></ProtectedRoute>} />
-      <Route path="/jurnal-wali" element={<ProtectedRoute><JurnalWali /></ProtectedRoute>} />
-      <Route path="/modul" element={<ProtectedRoute><ModulPembelajaran /></ProtectedRoute>} />
-      <Route path="/struktur-kelas" element={<ProtectedRoute><StrukturKelas /></ProtectedRoute>} />
-      <Route path="/jadwal-piket" element={<ProtectedRoute><JadwalPiket /></ProtectedRoute>} />
-      <Route path="/ujian" element={<ProtectedRoute><UjianOnline /></ProtectedRoute>} />
-      <Route path="/izin-pegawai" element={<ProtectedRoute><IzinPegawai /></ProtectedRoute>} />
-      <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
-      <Route path="/jurnal-kaih" element={<ProtectedRoute><Jurnal7KAIH /></ProtectedRoute>} />
-      <Route path="/kerjakan-ujian" element={<ProtectedRoute><KerjakanUjian /></ProtectedRoute>} />
-      <Route path="/translator" element={<ProtectedRoute><EnglishTranslator /></ProtectedRoute>} />
-      <Route path="/absen-barcode" element={<ProtectedRoute><AbsenBarcode /></ProtectedRoute>} />
+
+      {/* Route Siswa */}
+      <Route path="/siswa-dashboard" element={
+        <ProtectedRoute allowRoles={['siswa']}><DashboardSiswa /></ProtectedRoute>
+      } />
+      <Route path="/kerjakan-ujian" element={
+        <ProtectedRoute allowRoles={['siswa', 'guru', 'admin']}><KerjakanUjian /></ProtectedRoute>
+      } />
+
+      {/* Route Guru/Admin */}
+      <Route path="/" element={<ProtectedRoute allowRoles={['guru','admin']}><Dashboard /></ProtectedRoute>} />
+      <Route path="/absensi" element={<ProtectedRoute allowRoles={['guru','admin']}><AbsensiKelas /></ProtectedRoute>} />
+      <Route path="/jurnal" element={<ProtectedRoute allowRoles={['guru','admin']}><Jurnal /></ProtectedRoute>} />
+      <Route path="/penilaian" element={<ProtectedRoute allowRoles={['guru','admin']}><Penilaian /></ProtectedRoute>} />
+      <Route path="/siswa" element={<ProtectedRoute allowRoles={['guru','admin']}><Siswa /></ProtectedRoute>} />
+      <Route path="/kelas" element={<ProtectedRoute allowRoles={['guru','admin']}><Kelas /></ProtectedRoute>} />
+      <Route path="/materi" element={<ProtectedRoute allowRoles={['guru','admin']}><Materi /></ProtectedRoute>} />
+      <Route path="/raport" element={<ProtectedRoute allowRoles={['guru','admin']}><Raport /></ProtectedRoute>} />
+      <Route path="/pelanggaran" element={<ProtectedRoute allowRoles={['guru','admin']}><PelanggaranSiswa /></ProtectedRoute>} />
+      <Route path="/absensi-pegawai" element={<ProtectedRoute allowRoles={['guru','admin']}><AbsensiPegawai /></ProtectedRoute>} />
+      <Route path="/jurnal-wali" element={<ProtectedRoute allowRoles={['guru','admin']}><JurnalWali /></ProtectedRoute>} />
+      <Route path="/modul" element={<ProtectedRoute allowRoles={['guru','admin']}><ModulPembelajaran /></ProtectedRoute>} />
+      <Route path="/struktur-kelas" element={<ProtectedRoute allowRoles={['guru','admin']}><StrukturKelas /></ProtectedRoute>} />
+      <Route path="/jadwal-piket" element={<ProtectedRoute allowRoles={['guru','admin']}><JadwalPiket /></ProtectedRoute>} />
+      <Route path="/ujian" element={<ProtectedRoute allowRoles={['guru','admin']}><UjianOnline /></ProtectedRoute>} />
+      <Route path="/izin-pegawai" element={<ProtectedRoute allowRoles={['guru','admin']}><IzinPegawai /></ProtectedRoute>} />
+      <Route path="/profil" element={<ProtectedRoute allowRoles={['guru','admin']}><Profil /></ProtectedRoute>} />
+      <Route path="/jurnal-kaih" element={<ProtectedRoute allowRoles={['guru','admin']}><Jurnal7KAIH /></ProtectedRoute>} />
+      <Route path="/translator" element={<ProtectedRoute allowRoles={['guru','admin']}><EnglishTranslator /></ProtectedRoute>} />
+      <Route path="/absen-barcode" element={<ProtectedRoute allowRoles={['guru','admin']}><AbsenBarcode /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
