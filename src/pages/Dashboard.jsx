@@ -10,6 +10,7 @@ const menuUtama = [
   { emoji: '🏫', label: 'Kelas', path: '/kelas', bg: 'bg-orange-50', border: 'border-orange-200' },
   { emoji: '☁️', label: 'Materi', path: '/materi', bg: 'bg-purple-50', border: 'border-purple-200' },
   { emoji: '📄', label: 'Raport', path: '/raport', bg: 'bg-green-50', border: 'border-green-200' },
+  { label: 'Akun Siswa', icon: '👤', path: '/akun-siswa', roles: ['admin'] }
 ]
 
 const fiturLainnya = [
