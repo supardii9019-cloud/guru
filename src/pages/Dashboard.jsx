@@ -10,7 +10,6 @@ const menuUtama = [
   { emoji: '🏫', label: 'Kelas', path: '/kelas', bg: 'bg-orange-50', border: 'border-orange-200' },
   { emoji: '☁️', label: 'Materi', path: '/materi', bg: 'bg-purple-50', border: 'border-purple-200' },
   { emoji: '📄', label: 'Raport', path: '/raport', bg: 'bg-green-50', border: 'border-green-200' },
-  { label: 'Akun Siswa', icon: '👤', path: '/akun-siswa', roles: ['admin'] }
 ]
 
 const fiturLainnya = [
@@ -29,6 +28,10 @@ const fiturLainnya = [
   { emoji: '🗂️', label: 'Absensi\nPegawai', path: '/absensi-pegawai', bg: 'bg-blue-50', border: 'border-blue-200' },
 ]
 
+const menuAdmin = [
+  { emoji: '👤', label: 'Akun\nSiswa', path: '/akun-siswa', bg: 'bg-violet-50', border: 'border-violet-200' },
+]
+
 const MenuItem = ({ item, onClick }) => (
   <button
     onClick={onClick}
@@ -45,7 +48,7 @@ const MenuItem = ({ item, onClick }) => (
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { pegawai, user } = useAuth()
+  const { pegawai, user, role } = useAuth()
 
   const greeting = () => {
     const h = new Date().getHours()
@@ -85,6 +88,18 @@ export default function Dashboard() {
             <MenuItem key={i} item={item} onClick={() => item.path !== '#' ? navigate(item.path) : null} />
           ))}
         </div>
+
+        {/* Menu Admin */}
+        {role === 'admin' && (
+          <>
+            <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">Menu Admin</h2>
+            <div className="grid grid-cols-4 gap-2 mb-4">
+              {menuAdmin.map((item, i) => (
+                <MenuItem key={i} item={item} onClick={() => navigate(item.path)} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </Layout>
   )
