@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         .from('pegawai')
         .select('*')
         .eq('email', email)
-        .single()
+        .maybeSingle()
 
       if (pegawaiData) {
         setPegawai(pegawaiData)
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
         .from('siswa_auth')
         .select('*, siswa(*)')
         .eq('email', email)
-        .single()
+        .maybeSingle()
 
       if (siswaAuth?.siswa) {
         setSiswaProfile(siswaAuth.siswa)

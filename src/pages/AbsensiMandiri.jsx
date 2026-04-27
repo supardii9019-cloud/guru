@@ -102,7 +102,7 @@ export default function AbsensiMandiri() {
   const cekAbsenHariIni = async () => {
     const { data } = await supabase
       .from('absensi_pegawai').select('*')
-      .eq('pegawai_id', pegawai.id).eq('tanggal', tanggal).single()
+      .eq('pegawai_id', pegawai.id).eq('tanggal', tanggal).maybeSingle()
     if (data) {
       setAbsenHariIni(data)
       setSudahMasuk(!!data.jam_masuk)

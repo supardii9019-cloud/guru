@@ -46,7 +46,7 @@ export default function Raport() {
       .from('siswa')
       .select('*, kelas(nama_kelas, wali_kelas_id)')
       .eq('id', selectedSiswa)
-      .single()
+      .maybeSingle()
 
     // Group nilai by mapel
     const mapelMap = {}
