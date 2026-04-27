@@ -25,11 +25,13 @@ const fiturLainnya = [
   { emoji: '✅', label: 'Izin\nPegawai', path: '/izin-pegawai', bg: 'bg-teal-50', border: 'border-teal-200' },
   { emoji: '💬', label: 'Absensi\nWA', path: '#', bg: 'bg-green-50', border: 'border-green-200' },
   { emoji: '📱', label: 'Absen\nBarcode', path: '/absen-barcode', bg: 'bg-purple-50', border: 'border-purple-200' },
+  { emoji: '🕐', label: 'Absensi\nMandiri', path: '/absensi-mandiri', bg: 'bg-emerald-50', border: 'border-emerald-200' },
   { emoji: '🗂️', label: 'Absensi\nPegawai', path: '/absensi-pegawai', bg: 'bg-blue-50', border: 'border-blue-200' },
 ]
 
 const menuAdmin = [
   { emoji: '👤', label: 'Akun\nSiswa', path: '/akun-siswa', bg: 'bg-violet-50', border: 'border-violet-200' },
+  { emoji: '⚙️', label: 'Pengaturan\nAbsensi', path: '/pengaturan-absensi', bg: 'bg-indigo-50', border: 'border-indigo-200' },
 ]
 
 const MenuItem = ({ item, onClick }) => (

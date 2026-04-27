@@ -26,6 +26,8 @@ import EnglishTranslator from './pages/EnglishTranslator'
 import AbsenBarcode from './pages/AbsenBarcode'
 import DashboardSiswa from './pages/DashboardSiswa'
 import AkunSiswa from './pages/AkunSiswa'
+import AbsensiMandiri from './pages/AbsensiMandiri'
+import PengaturanAbsensi from './pages/PengaturanAbsensi'
 
 const ProtectedRoute = ({ children, allowRoles }) => {
   const { user, role, loading } = useAuth()
@@ -74,6 +76,8 @@ function AppRoutes() {
       <Route path="/profil" element={<ProtectedRoute allowRoles={['guru','admin']}><Profil /></ProtectedRoute>} />
       <Route path="/jurnal-kaih" element={<ProtectedRoute allowRoles={['guru','admin']}><Jurnal7KAIH /></ProtectedRoute>} />
       <Route path="/translator" element={<ProtectedRoute allowRoles={['guru','admin']}><EnglishTranslator /></ProtectedRoute>} />
+      <Route path="/pengaturan-absensi" element={<ProtectedRoute allowRoles={['admin']}><PengaturanAbsensi /></ProtectedRoute>} />
+      <Route path="/absensi-mandiri" element={<ProtectedRoute allowRoles={['guru','admin']}><AbsensiMandiri /></ProtectedRoute>} />
       <Route path="/absen-barcode" element={<ProtectedRoute allowRoles={['guru','admin']}><AbsenBarcode /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
