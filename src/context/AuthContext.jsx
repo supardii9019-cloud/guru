@@ -7,14 +7,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [pegawai, setPegawai] = useState(null)
   const [siswaProfile, setSiswaProfile] = useState(null)
-  const [role, setRole] = useState(null) // 'guru' | 'admin' | 'siswa'
+  const [role, setRole] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const fetchProfile = async (email) => {
     try {
-      // Cek dulu di pegawai (guru/admin)
-      // maybeSingle() returns null (not 406) when no row found
-      const { data: pegawaiData } = await supabase
+      const { data: pegawaiData, error: e1 } = await supabase
         .from('pegawai')
         .select('*')
         .eq('email', email)
@@ -28,8 +26,7 @@ export const AuthProvider = ({ children }) => {
         return
       }
 
-      // Cek di siswa_auth (akun siswa)
-      const { data: siswaAuth } = await supabase
+      const { data: siswaAuth, error: e2 } = await supabase
         .from('siswa_auth')
         .select('*, siswa(*)')
         .eq('email', email)
@@ -43,6 +40,22 @@ export const AuthProvider = ({ children }) => {
         return
       }
 
+      // siswa_auth ada tapi siswa join null — coba fetch siswa langsung
+      if (siswaAuth?.siswa_id) {
+        const { data: siswaData } = await supabase
+          .from('siswa')
+          .select('*')
+          .eq('id', siswaAuth.siswa_id)
+          .maybeSingle()
+        if (siswaData) {
+          setSiswaProfile(siswaData)
+          setPegawai(null)
+          setRole('siswa')
+          setLoading(false)
+          return
+        }
+      }
+
       setLoading(false)
     } catch (e) {
       setLoading(false)
@@ -50,11 +63,8 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    // Fallback: force loading=false after 5s to prevent infinite white screen
     const timeout = setTimeout(() => setLoading(false), 5000)
 
-    // onAuthStateChange fires INITIAL_SESSION on page load (before getSession resolves).
-    // Handle it here so the session is always picked up, even on refresh.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         clearTimeout(timeout)
@@ -66,7 +76,6 @@ export const AuthProvider = ({ children }) => {
           setRole(null)
           setLoading(false)
         } else if (session?.user) {
-          // Covers INITIAL_SESSION, SIGNED_IN, TOKEN_REFRESHED
           fetchProfile(session.user.email)
         } else {
           setLoading(false)

@@ -43,6 +43,8 @@ export default function DashboardSiswa() {
     return 'text-red-600 bg-red-50'
   }
 
+  if (!siswaProfile) return <div className="min-h-screen flex items-center justify-center"><div className="text-center"><div className="w-14 h-14 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin mx-auto"></div><p className="mt-3 text-blue-600 font-semibold text-sm">Memuat profil...</p></div></div>
+
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       {/* Header */}
