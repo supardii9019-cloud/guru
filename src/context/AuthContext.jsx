@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   const fetchProfile = async (email) => {
     try {
       // Cek dulu di pegawai (guru/admin)
+      // maybeSingle() returns null (not 406) when no row found
       const { data: pegawaiData } = await supabase
         .from('pegawai')
         .select('*')
@@ -49,28 +50,26 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    // Fallback: force loading=false after 5s to prevent infinite white screen
     const timeout = setTimeout(() => setLoading(false), 5000)
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      clearTimeout(timeout)
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        fetchProfile(session.user.email)
-      } else {
-        setLoading(false)
-      }
-    })
-
+    // onAuthStateChange fires INITIAL_SESSION on page load (before getSession resolves).
+    // Handle it here so the session is always picked up, even on refresh.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
+        clearTimeout(timeout)
         setUser(session?.user ?? null)
+
         if (_event === 'SIGNED_OUT') {
           setPegawai(null)
           setSiswaProfile(null)
           setRole(null)
           setLoading(false)
-        } else if (_event === 'SIGNED_IN' && session?.user) {
+        } else if (session?.user) {
+          // Covers INITIAL_SESSION, SIGNED_IN, TOKEN_REFRESHED
           fetchProfile(session.user.email)
+        } else {
+          setLoading(false)
         }
       }
     )
