@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchProfile = async (email) => {
     try {
-      const { data: pegawaiData, error: e1 } = await supabase
+      const { data: pegawaiData } = await supabase
         .from('pegawai')
         .select('*')
         .eq('email', email)
@@ -26,29 +26,28 @@ export const AuthProvider = ({ children }) => {
         return
       }
 
-      const { data: siswaAuth, error: e2 } = await supabase
+      const { data: siswaAuth } = await supabase
         .from('siswa_auth')
         .select('*, siswa(*)')
         .eq('email', email)
         .maybeSingle()
 
-      if (siswaAuth?.siswa) {
-        setSiswaProfile(siswaAuth.siswa)
-        setPegawai(null)
-        setRole('siswa')
-        setLoading(false)
-        return
-      }
+      if (siswaAuth) {
+        // Coba dari join dulu
+        let profileData = siswaAuth.siswa
 
-      // siswa_auth ada tapi siswa join null — coba fetch siswa langsung
-      if (siswaAuth?.siswa_id) {
-        const { data: siswaData } = await supabase
-          .from('siswa')
-          .select('*')
-          .eq('id', siswaAuth.siswa_id)
-          .maybeSingle()
-        if (siswaData) {
-          setSiswaProfile(siswaData)
+        // Fallback: fetch siswa langsung jika join null
+        if (!profileData && siswaAuth.siswa_id) {
+          const { data: siswaData } = await supabase
+            .from('siswa')
+            .select('*')
+            .eq('id', siswaAuth.siswa_id)
+            .maybeSingle()
+          profileData = siswaData
+        }
+
+        if (profileData) {
+          setSiswaProfile(profileData)
           setPegawai(null)
           setRole('siswa')
           setLoading(false)
@@ -63,7 +62,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const timeout = setTimeout(() => setLoading(false), 5000)
+    const timeout = setTimeout(() => setLoading(false), 8000)
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
@@ -76,6 +75,7 @@ export const AuthProvider = ({ children }) => {
           setRole(null)
           setLoading(false)
         } else if (session?.user) {
+          setLoading(true) // pastikan loading true saat fetch profile
           fetchProfile(session.user.email)
         } else {
           setLoading(false)
